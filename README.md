@@ -1,6 +1,2 @@
 # Projet-Reseau
-Membres:
-Mohammed Ayoub Saidi
-Faouzi Bakkali
-Imad Eddine Tabyaoui
-Cyrine Ezzine
+Membres du groupe:Mohammed Ayoub Saidi / Faouzi Bakkali / Imad Eddine Tabyaoui / Cyrine Ezzine
