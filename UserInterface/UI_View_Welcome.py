@@ -36,7 +36,17 @@ class WelcomeScreen(arcade.View):
           font_name="Arial",
           text='',
           )
+        self.input_field1 = arcade.gui.UIInputText(
+            text_color=arcade.color.WHITE,
+            y=constantes.MIDDLE[1],
+            x=28 + 200,
+            font_size=12,
+            width=200,
+            font_name="Arial",
+            text='',
+        )
         self.input_field.cursor_index = len(self.input_field.text)
+        self.input_field1.cursor_index = len(self.input_field1.text)
         self.label = arcade.gui.UILabel(
             text="Enter Game Name",
             text_color=arcade.color.BLACK,
