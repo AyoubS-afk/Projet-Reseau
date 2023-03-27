@@ -125,7 +125,7 @@ class WelcomeScreen(arcade.View):
         window.update_name(self.input_field.text)
         window.hide_view()
         window.show_view(window.gamescreen)
-        subprocess.call(['python', ''])
+        #subprocess.call(['python', ''])
 
     def on_join_click(self, event: arcade.gui.UIOnClickEvent):
         pass
