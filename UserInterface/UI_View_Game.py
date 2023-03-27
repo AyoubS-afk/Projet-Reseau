@@ -732,6 +732,16 @@ class GameView(arcade.View):
             return True
         return False
 
+    def add_one_sized_building_2(self,pos,building):
+        # ================================
+        #       Add single tile Building
+        # ================================
+        line, column = self.visualmap.get_sprite_at_screen_coordinates(pos)
+        if self.game.add_building(line, column, building):
+            self.visualmap.update_layers(self.visualmap.buildings_layer, self.game.map.buildings_layer.array)
+            return True
+        return False
+
     def add_multiple_one_sized_building(self):
         for (line,column) in self.surface_drag:
             if self.game.add_building(line,column,self.builder_content):

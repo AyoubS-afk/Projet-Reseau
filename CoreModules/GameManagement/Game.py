@@ -9,7 +9,7 @@ from CoreModules.WalkersManagement import walkersManagementWalker as walkers
 
 import copy
 
-INIT_MONEY = 100000000
+INIT_MONEY = 1000
 TIME_BEFORE_REMOVING_DWELL = 3 #seconds
 import time
 
@@ -238,7 +238,7 @@ class Game:
                             walker.wait = True
 
                 elif status is None:
-                    if isinstance(walker, walkers.Citizen):
+                    if isinstance(walker, walkers.Citizen) and type(walker)!=walkers.Soldier:
                         walker.work(self.get_buildings_for_walker(walker.init_pos), update)
 
         for w_to_update in walker_to_update:
@@ -362,6 +362,26 @@ class Game:
 
                     engineer.init_pos = possible_road[0]
                     self.walkersGetOut(engineer)
+
+            # =======================================
+            #  Creation of soldier
+            # =======================================
+            elif k.dic['version'] == "school" and any(has_road) and \
+                    k.current_number_of_employees < k.max_number_of_employees and not k.isDestroyed and not k.isBurning:
+                if self.unemployedCitizens:
+                    citizen = random.choice(self.unemployedCitizens)
+                    soldier = citizen.change_profession("soldier")
+                    self.walkersAll.remove(citizen)
+                    self.unemployedCitizens.remove(citizen)
+
+                    self.walkersAll.append(soldier)
+                    self.walkersAll = list(set(self.walkersAll))
+
+                    soldier.set_working_building(k)
+                    k.add_employee(soldier.id, update_number=True)
+
+                    soldier.init_pos = possible_road[0]
+                    self.walkersGetOut(soldier)
             # =======================================
             #  Creation of priest
             # =======================================
@@ -387,12 +407,12 @@ class Game:
             # =======================================
             #  Creation of cart_pushers
             # =======================================
+
             elif k.dic['version'] in farm_types:
                 if k.in_state_0():
                     #print("etat 0")
                     k.stop_production = True
                     if self.unemployedCitizens and any(has_road):
-
                         citizen = random.choice(self.unemployedCitizens)
                         ### pour toutes les fermes
                         pusher_wheat = citizen.change_profession("pusher_wheat")

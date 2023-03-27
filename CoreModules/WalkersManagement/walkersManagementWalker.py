@@ -254,6 +254,10 @@ class Walker:
             new = Cart_Pusher_Wheat(self.init_pos[0],self.init_pos[1],self.house,self.zoom,self.game,self.fps,self.head,
             self.init_pos,self.dest_pos,self.compteur,self.offset_x,self.offset_y,self.id,self.is_at_home,
                           self.direction,self.current_path_to_follow.copy(),self.dest_compteur)
+        elif new_type == "soldier":
+            new = Soldier(self.init_pos[0],self.init_pos[1],self.house,self.zoom,self.game,self.fps,self.head,
+            self.init_pos,self.dest_pos,self.compteur,self.offset_x,self.offset_y,self.id,self.is_at_home,
+                          self.direction,self.current_path_to_follow.copy(),self.dest_compteur)
         return new
 
 
@@ -479,4 +483,27 @@ class Priest(Citizen):
         """
         This function receives a list of buildings it must reset risk
         """
+        pass
+
+class Soldier(Citizen):
+    def __init__(self,pos_ligne, pos_col, house, zoom, game,fps,head,init_pos,dest_pos,compteur,offset_x,offset_y,id,
+                 is_at_home,direction,current_path, dest_compteur):
+        super(Soldier, self).__init__(pos_ligne, pos_col, house, zoom, game,fps,head,init_pos,dest_pos,compteur,offset_x,offset_y,id,
+                 is_at_home,direction,current_path,dest_compteur)
+        self.fps = fps
+        self.zoom = zoom
+        self.head = head
+        self.init_pos = init_pos
+        self.dest_pos = dest_pos
+        self.compteur = compteur
+        self.offset_x, self.offset_y = offset_x, offset_y
+        self.house = house
+        self.direction = direction
+        self.current_path_to_follow = current_path
+        self.dest_compteur = dest_compteur
+        self.id = id
+        self.is_at_home = is_at_home
+        self.work_target = None
+
+    def work(self):
         pass

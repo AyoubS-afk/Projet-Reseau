@@ -64,5 +64,15 @@ def walkers_to_sprite(type_walker):
             up = [const.SPRITE_PATH + "Cart_Pusher/wheat" +str(i)+".png" for i in range(13, 25)]
             down = [const.SPRITE_PATH + "Cart_Pusher/wheat" +str(i)+".png" for i in range(25, 37)]
             left = [const.SPRITE_PATH + "Cart_Pusher/wheat" +str(i)+".png" for i in range(37, 49)]
+        case "Soldier":
+            sprite_number=241
+            up = [const.SPRITE_PATH + "Citizen3/Type3/Citizen03_{:05d}".format(sprite_number + 2 + k * 8) + ".png" for k in
+                  range(0, 12)]
+            left = [const.SPRITE_PATH + "Citizen3/Type3/Citizen03_{:05d}".format(sprite_number + 6 + k * 8) + ".png" for k in
+                    range(0, 12)]
+            down = [const.SPRITE_PATH + "Citizen3/Type3/Citizen03_{:05d}".format(sprite_number + 4 + k * 8) + ".png" for k in
+                    range(0, 12)]
+            right = [const.SPRITE_PATH + "Citizen3/Type3/Citizen03_{:05d}".format(sprite_number + k * 8) + ".png" for k in
+                     range(0, 12)]
 
     return up, left, down, right
