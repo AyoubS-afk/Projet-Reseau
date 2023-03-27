@@ -5,11 +5,12 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 void receive_message()
 {
 
-    int sockfd;
+    int sockfd, i;
     struct sockaddr_in servaddr, cliaddr;
 
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -33,9 +34,12 @@ void receive_message()
 
     char buffer[1024];
     socklen_t len = sizeof(cliaddr);
-    int n = recvfrom(sockfd, (char *)buffer, sizeof(buffer), 0, (struct sockaddr *)&cliaddr, &len);
-    buffer[n] = '\0';
-    printf("Received message: %s\n", buffer);
+    for (int i = 0; i < 10; i++)
+    {
+        int n = recvfrom(sockfd, (char *)buffer, sizeof(buffer), 0, (struct sockaddr *)&cliaddr, &len);
+        buffer[n] = '\0';
+        printf("Received message: %s\n", buffer);
+    }
 
     close(sockfd);
 }

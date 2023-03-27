@@ -6,10 +6,11 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 void send_message(const char *message)
 {
-    int sockfd;
+    int sockfd, i;
     struct sockaddr_in servaddr;
 
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -23,9 +24,10 @@ void send_message(const char *message)
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(8080);
     servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
-    sendto(sockfd, message, strlen(message), 0, (const struct sockaddr *)&servaddr, sizeof(servaddr));
-    printf("Message sent.\n");
-
+    for (int i = 0; i < 10; i++)
+    {
+        sendto(sockfd, message, strlen(message), 0, (const struct sockaddr *)&servaddr, sizeof(servaddr));
+        printf("Message sent.\n");
+    }
     close(sockfd);
 }
