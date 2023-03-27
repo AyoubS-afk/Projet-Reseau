@@ -7,7 +7,6 @@ MIDDLE = (DEFAULT_SCREEN_WIDTH/2, DEFAULT_SCREEN_HEIGHT/2)
 TITLE = "Pysar"
 
 
-DLL_PATH = "C:/Users/ADMIN/Desktop/Projet-Reseau/Network/network.dll"
 SPRITE_PATH = "Assets/sprites/C32/"
 LOGO_PATH = SPRITE_PATH + "logo.png"
 DEFAULT_FPS = 60
