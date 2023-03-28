@@ -1,5 +1,4 @@
 import arcade
-import subprocess
 from Services import servicesGlobalVariables as constantes
 from UserInterface import UI_buttons as but
 import arcade.gui
@@ -135,7 +134,6 @@ class WelcomeScreen(arcade.View):
         window.update_name(self.input_field.text)
         window.hide_view()
         window.show_view(window.gamescreen)
-        #subprocess.call(['python', ''])
 
     def on_join_click(self, event: arcade.gui.UIOnClickEvent):
         pass
