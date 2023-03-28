@@ -1,9 +1,10 @@
 import ctypes
 
 
-udp_client_send = ctypes.CDLL('./udp_client_send.so')
-udp_client_receive = ctypes.CDLL('./udp_client_receive.so')
-
+udp_client_send = ctypes.CDLL(
+    "./udp_client_send.so")
+udp_client_receive = ctypes.CDLL(
+    "./udp_client_receive.so")
 
 udp_client_send.send_message.argtypes = [ctypes.c_char_p]
 udp_client_send.send_message.restype = None
