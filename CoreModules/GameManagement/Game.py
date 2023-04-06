@@ -6,6 +6,7 @@ from Services.servicesmMapSpriteToFile import water_structures_types, farm_types
 from CoreModules.GameManagement import Update as updates
 from CoreModules.BuildingsManagement import buildingsManagementBuilding as buildings
 from CoreModules.WalkersManagement import walkersManagementWalker as walkers
+import MultiPlayer as mp
 
 import copy
 
@@ -22,7 +23,7 @@ class Game:
         self.map = _map
         self.startGame()
         self.scaling = 0
-
+        self.multiplayer = mp.MultiPlayer(self)
         self.money = INIT_MONEY
         self.food = 0
         self.potery = 0
@@ -737,6 +738,8 @@ class Game:
 
 
     def add_building(self, line, column, version) -> bool:
+        if self.multiplayer.x==0:
+            self.multiplayer.addBuilding(version,(line,column))
         txt= " ".join(version.split("_"))
         if self.money < building_dico[txt].cost:
             print("Not enough money")
