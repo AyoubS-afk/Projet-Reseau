@@ -1,4 +1,0 @@
-arcade
-pyglet
-pathfinding
-pyautogui
