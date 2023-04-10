@@ -6,14 +6,13 @@ from Services.servicesmMapSpriteToFile import water_structures_types, farm_types
 from CoreModules.GameManagement import Update as updates
 from CoreModules.BuildingsManagement import buildingsManagementBuilding as buildings
 from CoreModules.WalkersManagement import walkersManagementWalker as walkers
-import MultiPlayer as mp
 
 import copy
 
 INIT_MONEY = 1000
 TIME_BEFORE_REMOVING_DWELL = 3 #seconds
 import time
-
+interNet = None
 """
 ATTENTION: Building en feu pourrait etre updated
 """
@@ -23,7 +22,6 @@ class Game:
         self.map = _map
         self.startGame()
         self.scaling = 0
-        self.multiplayer = mp.MultiPlayer(self)
         self.money = INIT_MONEY
         self.food = 0
         self.potery = 0
@@ -36,10 +34,11 @@ class Game:
         self.walkersAll = []
         self.walkersOut = []
         self.unemployedCitizens = []
+        self.send_buff =""
+        self.recv_buff =""
 
         self.framerate = globalVar.DEFAULT_FPS
         self.updated = []
-
         # some lists of specific buildings
         self.dwelling_list = []
 
@@ -200,7 +199,15 @@ class Game:
         # The important object that will contain the updates
         self.scaling = scaling
         update = updates.LogicUpdate()
-
+        if interNet is not None:
+            interNet.exec()
+        if len(interNet.buffer_s)!=0:
+            print(interNet.buffer_s)
+            recv_buff=interNet.decrypter_msg(interNet.buffer_s[0])
+            self.do_function(recv_buff)
+        if self.send_buff!="":
+            interNet.net.send_msg_s(self.send_buff)
+            self.send_buff=""
         # =======================================
         #  Updates of the walker
         # =======================================
@@ -738,8 +745,7 @@ class Game:
 
 
     def add_building(self, line, column, version) -> bool:
-        if self.multiplayer.x==0:
-            self.multiplayer.addBuilding(version,(line,column))
+        self.send_buff = interNet.net.encrypter_msg("add_building",str(line),str(column),version)
         txt= " ".join(version.split("_"))
         if self.money < building_dico[txt].cost:
             print("Not enough money")
@@ -838,3 +844,8 @@ class Game:
             if isinstance(walker, walkers.Prefect):
                 prefets.append(walker)
         return prefets
+
+    def do_function(self,buff):
+        match buff[0]:
+            case "add_building":
+                self.add_building(buff[1],buff[2],buff[3])

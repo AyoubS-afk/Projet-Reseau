@@ -2,7 +2,8 @@ import arcade
 from Services import servicesGlobalVariables as constantes
 from UserInterface import UI_buttons as but
 import arcade.gui
-
+from onlineManagement import netIPC as net
+from CoreModules.GameManagement import Game
 class WelcomeScreen(arcade.View):
 
     def __init__(self):
@@ -44,8 +45,18 @@ class WelcomeScreen(arcade.View):
             font_name="Arial",
             text='',
         )
+        self.input_field2 = arcade.gui.UIInputText(
+            text_color=arcade.color.WHITE,
+            y=constantes.MIDDLE[1]-90,
+            x=28 + 200,
+            font_size=12,
+            width=200,
+            font_name="Arial",
+            text='',
+        )
         self.input_field.cursor_index = len(self.input_field.text)
         self.input_field1.cursor_index = len(self.input_field1.text)
+        self.input_field2.cursor_index = len(self.input_field2.text)
         self.label = arcade.gui.UILabel(
             text="Enter Game Name",
             text_color=arcade.color.BLACK,
@@ -59,6 +70,15 @@ class WelcomeScreen(arcade.View):
             text="IP Address",
             text_color=arcade.color.BLACK,
             y=constantes.MIDDLE[1] + 45,
+            x=20 + 200,
+            width=350,
+            height=40,
+            font_size=22,
+            font_name="Arial")
+        self.label2 = arcade.gui.UILabel(
+            text="Port",
+            text_color=arcade.color.BLACK,
+            y=constantes.MIDDLE[1]-45,
             x=20 + 200,
             width=350,
             height=40,
@@ -84,7 +104,9 @@ class WelcomeScreen(arcade.View):
         self.manager1 = arcade.gui.UIManager()
         self.manager1.add(self.join_game_button)
         self.manager1.add(self.label1)
-        self.manager1.add(self.input_field)
+        self.manager1.add(self.label2)
+        self.manager1.add(self.input_field1)
+        self.manager1.add(self.input_field2)
 
     def on_show_view(self):
         if self.step != 0:
@@ -117,6 +139,8 @@ class WelcomeScreen(arcade.View):
                                           texture=but.texture_panel1)
             arcade.draw_texture_rectangle(center_x=180 + 200, center_y=constantes.MIDDLE[1] + 40, width=320, height=20,
                                           texture=but.texture_panel46)
+            arcade.draw_texture_rectangle(center_x=180 + 200, center_y=constantes.MIDDLE[1]-50, width=320, height=20,
+                                          texture=but.texture_panel46)
             self.manager1.draw()
            
 
@@ -130,13 +154,27 @@ class WelcomeScreen(arcade.View):
         self.buttons_manager.disable()
     
     def on_create_click(self, event: arcade.gui.UIOnClickEvent):
+        Game.interNet = net.netIPC(typeCo=0)
+        Game.interNet.net.start()
+        Game.interNet.net.send_msg('i{g{0}}')
         window = arcade.get_window()
         window.update_name(self.input_field.text)
         window.hide_view()
         window.show_view(window.gamescreen)
 
     def on_join_click(self, event: arcade.gui.UIOnClickEvent):
-        pass
+        Game.interNet = net.netIPC(typeCo=1)
+        window = arcade.get_window()
+        IP_ADDRESS = self.input_field1.text
+        PORT = self.input_field2.text
+        if Game.interNet.ipChecker(IP_ADDRESS) and Game.interNet.portCherker(PORT):
+            Game.interNet.net.set_ip_addr_srv(IP_ADDRESS)
+            Game.interNet.net.set_port_srv(PORT)
+            Game.interNet.net.start()
+            Game.interNet.net.send_msg('i{g{0}}')
+            window.hide_view()
+            window.show_view(window.gamescreen)
+
     
     def replace_on_click(self,event):
         self.manager.enable()
