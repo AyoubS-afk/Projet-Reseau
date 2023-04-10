@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "*.embeddedhtml": "html",
+    "joueur1.C": "cpp"
+  }
+}
