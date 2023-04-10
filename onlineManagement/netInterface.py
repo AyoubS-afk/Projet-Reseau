@@ -100,9 +100,7 @@ class NetInterface():
 
     def decrypter_msg(self, msg_encode):
         msg_decode = msg_encode.split(":")
-        nom_fonction = msg_decode[0]
-        parametres = msg_decode[1:]
-        return [nom_fonction, parametres]
+        return msg_decode
 
     def translate_msg(self, val : int) -> None:
         self.buf_recv = self.buf_recv.decode()[val+1:].encode()

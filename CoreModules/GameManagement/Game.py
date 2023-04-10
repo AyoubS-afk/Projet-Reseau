@@ -202,8 +202,8 @@ class Game:
         if interNet is not None:
             interNet.exec()
         if len(interNet.buffer_s)!=0:
-            print(interNet.buffer_s)
-            recv_buff=interNet.decrypter_msg(interNet.buffer_s[0])
+            recv_buff=interNet.net.decrypter_msg(interNet.buffer_s[0])
+            print(recv_buff)
             self.do_function(recv_buff)
         if self.send_buff!="":
             interNet.net.send_msg_s(self.send_buff)
