@@ -42,7 +42,7 @@ down = "down"
 
 class Walker:
     def __init__(self, pos_ligne, pos_col, house, zoom, game):
-
+        random.seed(12345)
         self.map_associated = game.map
         self.game = game
         # some layers we need

@@ -20,6 +20,7 @@ ATTENTION: Building en feu pourrait etre updated
 
 class Game:
     def __init__(self, _map, name="save", game_view=None):
+        random.seed(12345)
         self.name = name
         self.map = _map
         self.startGame()
