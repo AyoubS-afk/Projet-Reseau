@@ -12,7 +12,7 @@
 #define CYAN     "\033[1;32m"
 #define GREY     "\033[1;37m"
 
-#else // else BG_LIGHT
+#else 
 
 #define BLACK    "\033[0;30m"
 #define RED      "\033[0;31m"
@@ -23,7 +23,7 @@
 #define CYAN     "\033[0;36m"
 #define GREY     "\033[0;37m"
 
-#endif // endif BG_LIGHT
+#endif 
 
 #define DEFAULT_COLOR "\033[0;m"
 #define OK  BLUE "[" GREEN  "ok" BLUE "] " DEFAULT_COLOR

@@ -1,24 +1,5 @@
-/** ====================================================================
-**   Auteur  : GENY                   | Date    : 14/03/2022
-**  --------------------------------------------------------------------
-**   Langage : C                      | Systeme : Linux
-**  --------------------------------------------------------------------
-**   Nom fichier : string_net.c       | Version : 1.0
-**  --------------------------------------------------------------------
-**   Description : fonctions qui permetent d'interpreter se qui est
-**                 recu en reseau
-** =====================================================================*/
-
 #include "../includes/string_net.h"
 
-/*
-clear_string permet de supprimer les retour a la lignes et les retour charios d'une
-chaine de caractere
-
-input : char * -> chaine a nettoyer
-
-output: _SUCCESS_ -> si pas de probleme
-*/
 int clear_string(char *str)
 {
     int i = -1;
@@ -32,15 +13,6 @@ int clear_string(char *str)
     return _SUCCESS_;
 }
 
-/*
-translate_string permet de deplacer un message pour extraire un message et placer
-un second message en premier
-
-input : char * -> chaine des message
-        int    -> index de la fin du premier message
-
-output: _SUCCESS_ -> si pas d'erreur
-*/
 int translate_string(char *str, int index)
 {
     int i = -1;
@@ -52,16 +24,6 @@ int translate_string(char *str, int index)
     return _SUCCESS_;
 }
 
-/*
-indentify_message permet d'extraire un message d'un chaine de caractere et
-de l'extraire de la chaine pour la copier dans une autres chaine
-
-input : char * -> chaine a identifier un message
-        char * -> chaine de sortie si une chaine est trouve
-
-output: _NOT_COMPLET_ -> si un message n'est pas complet
-        size message  -> si pas d'erreur
-*/
 int identify_message(char *str, char *dest)
 {
     int i = -1, y=-1;
@@ -88,18 +50,6 @@ int identify_message(char *str, char *dest)
     return _NOT_COMPLET_;
 }
 
-/*
-message_nature permet de determiner si le message est une info a traite ou bien un
-message a faire suivre
-
-input : char * -> message a traite
-        char * -> message extrait
-
-output: _NOT_COMPLET_ -> si le message n'est pas complet
-        _ERR_         -> si le message n'est pas identifier
-        _SEND_REQUEST_ -> si le message est a faire suivre
-        _INFO_REQUEST_ -> si le message dois etre traite
-*/
 int message_nature(char *str, char *dest)
 {
     if (identify_message(str, dest) < 0)
@@ -111,15 +61,7 @@ int message_nature(char *str, char *dest)
     return _ERR_;
 }
 
-/*
-extract_into permet de recuperer les informations entre accolade
 
-input : char * -> message
-        char * -> information extraite
-
-output: _NOT_COMPLET_ -> si le message s'emble imcomplet
-        _SUCCESS_     -> si un message a etais extrait
-*/
 int extract_info(char *str, char *dest)
 {
     int open = 0;
@@ -140,16 +82,7 @@ int extract_info(char *str, char *dest)
     return _NOT_COMPLET_;
 }
 
-/*
-extract_doucle_info permet d'identifier une seconde information dans la trame
-qui est delimite par ','
 
-input : char * -> chaine a identifier qui contindra la seconde information
-        char * -> chaine qui recevera la premier information
-
-output: _NOT_COMPLET_ -> si la seconde information n'a pas pue etre identifier
-        _SUCCESS_     -> si pas d'erreur
-*/
 int extract_double_info(char *str, char *info)
 {
     int i=-1, y=-1, z=-1;
@@ -169,19 +102,6 @@ int extract_double_info(char *str, char *info)
     return _NOT_COMPLET_;
 }
 
-/*
-identify_info_connection permet d'interpreter le message d'information qui a etais
-recu via une connection TCP
-
-input : char *      -> message a interpreter
-        multi_t **  -> structure des connection
-        net_ipc_t * -> structure de la connection python
-        int         -> index de la source
-
-output: _NOT_INIT_    -> si multi_t n'est pas initialise
-        _NOT_COMPLET_ -> si le message n'est pas complet
-        _SUCCESS_     -> si le message a etais interprete
-*/
 int identify_info_connection(char *str, multi_t **net, net_ipc_t *ipc, int index, int size_str)
 {
     char information[BUFFER];
@@ -201,7 +121,7 @@ int identify_info_connection(char *str, multi_t **net, net_ipc_t *ipc, int index
 
     switch (str[2])
     {
-        case 'n': /* info sur le nom du joueur */
+        case 'n':
             if ((*net)->connexion[index].name[0] == 0)
             {
                 strcpy((*net)->connexion[index].name, information);
@@ -215,14 +135,14 @@ int identify_info_connection(char *str, multi_t **net, net_ipc_t *ipc, int index
                 send_ipc(ipc, information);
             }
             break;
-        case 'p': /* info sur le port de connexion */
+        case 'p': 
             if ((*net)->connexion[index].port < 0)
             {
                 (*net)->connexion[index].port = atoi(information);
                 send_port((*net), index);
             }
             break;
-        case 'l': /* demende de la liste des joueurs */
+        case 'l': 
             while (++i < 3)
             {
                 if (i != index && (*net)->connexion[i].sockfd > 0)
@@ -244,7 +164,7 @@ int identify_info_connection(char *str, multi_t **net, net_ipc_t *ipc, int index
             printf("[%sc%s] %snew serveur at %s%s:%s%s\n", GREEN, DEFAULT_COLOR, CYAN, YELLOW, buf, information, DEFAULT_COLOR);
             connect_to_other_srv(&(*net), buf, information);
             break;
-        case 'd': /* reception de fin de communication */
+        case 'd': 
             ft_itoa((*net)->connexion[index].id, buf, 10);
             strcpy(information, "i{d{");
             strcat(information, buf);
@@ -260,7 +180,7 @@ int identify_info_connection(char *str, multi_t **net, net_ipc_t *ipc, int index
             strcat(information, "}}");
             send_ipc(ipc, information);
             break;
-        case 'i': /* reception de l'ID ou demende d'attribution d'ID */
+        case 'i': 
             y = atoi(information);
             if (y < 0)
             {
@@ -299,18 +219,7 @@ int identify_info_connection(char *str, multi_t **net, net_ipc_t *ipc, int index
     return _SUCCESS_;
 }
 
-/*
-identify_info_ipc permet d'interpreter le message d'information qui a etais
-recu via une connection UDP
 
-input : char *      -> message a interpreter
-        multi_t **  -> structure des connection
-        net_ipc_t * -> structure de la connection python
-
-output: _NOT_INIT_    -> si multi_t n'est pas initialise
-        _NOT_COMPLET_ -> si le message n'est pas complet
-        _SUCCESS_     -> si le message a etais interprete
-*/
 int identify_info_ipc(char *str, multi_t **net, net_ipc_t *ipc)
 {
     char information[BUFFER];
@@ -330,27 +239,18 @@ int identify_info_ipc(char *str, multi_t **net, net_ipc_t *ipc)
     switch (str[2])
     {
         case 'd':
-            if (information[0] == '0') /* arret du processuce C */
+            if (information[0] == '0')
                 (*net)->isPlaying = 0;
             break;
         case 'g':
-            if (information[0] == '0') /* debut de la partie */
-                send_all_message((*net), "i{g{0}}"); /* avertie les personnes connecte du debut de la partie */
+            if (information[0] == '0') 
+                send_all_message((*net), "i{g{0}}"); 
             break;
     }
     return _SUCCESS_;
 }
 
-/*
-send_msg_connection permet d'envoyer un message a toute les connection
-TCP etablie
 
-input : multi_t * -> structure des connection TCP
-        char *    -> message a envoyer
-
-output: _NOT_INIT_ -> si la structure n'est pas initialise
-        _SUCCESS_  -> si pas d'erreur
-*/
 int send_msg_connection(multi_t *net, char *msg)
 {
     int i=-1;

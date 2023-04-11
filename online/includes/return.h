@@ -1,19 +1,6 @@
-/** ====================================================================
-**   Auteur  : GENY                   | Date    : 14/03/2022
-**  --------------------------------------------------------------------
-**   Langage : C                      | Systeme : Linux
-**  --------------------------------------------------------------------
-**   Nom fichier : return.h     | Version : 1.0
-**  --------------------------------------------------------------------
-**   Description : declaration des retours des fonctions
-** =====================================================================*/
-
 #ifndef __RETURN_H_
 #define __RETURN_H_
 
-/*
-definition des erreurs
-*/
 #define _NOT_COMPLET_     -2
 #define _CANT_ACCEPT_     -1
 #define _SUCCESS_          0

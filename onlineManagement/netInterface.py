@@ -4,13 +4,6 @@ import subprocess
 
 class NetInterface():
     def __init__(self, type : int, ip_addr = '', port = '') -> None:
-        '''
-            type    : int -> 0 for serveur
-                             1 for client
-            ip_addr : str -> ip server only use for client
-            port    : str -> port server only use for client
-
-        '''
         self.type = type
         self.ip_addr = ip_addr
         self.port_srv = port
@@ -32,11 +25,8 @@ class NetInterface():
         return nb_joueur
 
     def start(self) -> None:
-        '''
-            start client or server for multi play
-        '''
         validPort = False
-        while not validPort: # recherche un port non ouvert
+        while not validPort:
             try:
                 self.sock.bind(("127.0.0.1", self.port))
                 validPort = True
@@ -45,8 +35,7 @@ class NetInterface():
             except OSError:
                 self.port += 1
         print(f"[python] serveur local python : 127.0.0.1:{self.port}")
-        # demarrage du processuce C
-        subprocess.run("make -C online clean", shell=True) # temporaire
+        subprocess.run("make -C online clean", shell=True)
         if not os.path.isfile("online/online"):
             subprocess.run(["make", "-C", "online"])
         if self.type == 0:
@@ -58,9 +47,6 @@ class NetInterface():
             subprocess.call(f"./online/online {str(self.port)} {self.ip_addr} {self.port_srv} &", shell=True)
 
     def stop(self) -> None:
-        '''
-            stop client or server for multi play
-        '''
         self.send_msg("i{d{0}}")
         self.c = None
         self.port = 1024
@@ -105,9 +91,6 @@ class NetInterface():
     def translate_msg(self, val : int) -> None:
         self.buf_recv = self.buf_recv.decode()[val+1:].encode()
 
-    '''
-    #### Seter
-    '''
     def set_ip_addr_srv(self, new_ip : str) -> None:
         if self.c == None:
             self.ip_addr = new_ip

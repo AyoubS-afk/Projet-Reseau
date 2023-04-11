@@ -1,14 +1,3 @@
-/** ====================================================================
-**   Auteur  : GENY                   | Date    : 11/02/2022
-**  --------------------------------------------------------------------
-**   Langage : C                      | Systeme : Linux
-**  --------------------------------------------------------------------
-**   Nom fichier : itoa.c             | Version : 1.0
-**  --------------------------------------------------------------------
-**   Description : fonction qui permettent d'avoir la fonction
-**   itoa qui n'est pas sur tous les OS
-** =====================================================================*/
-
 #include "../includes/itoa.h"
 
 void swap(char *x, char *y)
@@ -16,7 +5,6 @@ void swap(char *x, char *y)
     char t = *x; *x = *y; *y = t;
 }
  
-// Function to reverse `buffer[i…j]`
 char* reverse(char *buffer, int i, int j)
 {
     while (i < j) {
@@ -26,15 +14,12 @@ char* reverse(char *buffer, int i, int j)
     return buffer;
 }
  
-// Iterative function to implement `itoa()` function in C
 char* ft_itoa(int value, char* buffer, int base)
 {
-    // invalid input
     if (base < 2 || base > 32) {
         return buffer;
     }
- 
-    // consider the absolute value of the number
+
     int n = abs(value);
  
     int i = 0;
@@ -52,20 +37,14 @@ char* ft_itoa(int value, char* buffer, int base)
         n = n / base;
     }
  
-    // if the number is 0
     if (i == 0) {
         buffer[i++] = '0';
     }
  
-    // If the base is 10 and the value is negative, the resulting string
-    // is preceded with a minus sign (-)
-    // With any other base, value is always considered unsigned
     if (value < 0 && base == 10) {
         buffer[i++] = '-';
     }
  
-    buffer[i] = '\0'; // null terminate string
- 
-    // reverse the string and return it
+    buffer[i] = '\0'; 
     return reverse(buffer, 0, i - 1);
 }

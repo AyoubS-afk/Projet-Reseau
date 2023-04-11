@@ -2,7 +2,6 @@ import re
 import onlineManagement.netInterface as interNet
 
 class netIPC():
-	"""docstring for netIPC"""
 	def __init__(self, ip="", port="", typeCo=1):
 		super(netIPC, self).__init__()
 		self.monPort = port
@@ -27,7 +26,6 @@ class netIPC():
 
 	def portCherker(self, monPort : str) -> bool:
 		self.isCheckOnes = True
-		#https://www.programiz.com/python-programming/regex
 		reg = re.search("^[1-9][0-9]{3}[0-9]{0,1}$",monPort)
 		if reg == None:
 			return False
@@ -59,11 +57,6 @@ class netIPC():
 	def decomposition(self, chaine, nbParties):
 		dico = {}
 		frame, index, t = self.extractFrame(chaine)
-		'''
-			frame est le contenue de la requete recu
-			index est l'index dans chaine de la fin de la requete
-			t     est le type de la requete : 0 -> i; 1 -> s
-		'''
 		if index > 0: self.net.translate_msg(index)
 		dico[frame[0]] = frame[2:-1]
 		return dico
@@ -222,32 +215,3 @@ class netIPC():
 		if self.net.get_msg(): # si on a recu un nouveau message
 			while self.protocolChecker(self.net.buf_recv) != -1:
 				pass
-
-#Test ajout suppression
-"""
-chaineProto = "i{c{nouman;5}}"
-netIpc = netIPC(ip, port, 0)
-netIpc.protocolChecker(chaineProto)
-chaineProto = "i{c{yanisTeubéééé;2}}"
-netIpc.protocolChecker(chaineProto)
-
-chaineProto = "i{d{5}}"
-netIpc.protocolChecker(chaineProto)
-"""
-
-#test yanis
-"""
-loop = True
-#interNet = NetInterface(0)
-
-interNet = interNet(1, '127.0.0.1', '1024')
-interNet.start()
-
-while loop:
-    interNet.get_msg()
-
-interNet.stop()
-
-time.sleep(1)
-
-"""
