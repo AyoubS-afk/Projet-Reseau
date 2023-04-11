@@ -72,8 +72,7 @@ class Game:
         self.init_time = time.time()
         self.timer_for_immigrant_arrival = {}
         self.tmp_ref_time = time.time()
-        # a dic of timers to track dwells with no roads
-        # it associates each position of dwell with a timer
+        # a dic of timers to track dwells with no roads it associates each position of dwell with a timer
         self.timer_track_dwells = {}
 
         self.paths_for_buildings = {}
