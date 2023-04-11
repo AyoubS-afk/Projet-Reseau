@@ -16,6 +16,7 @@ DEFAULT_WATER_DELIMITER = globalVar.TILE_COUNT-7
 class MapLogic:
     def __init__(self, entry, exit, water_delimiter):
         # Booléen qui dit si la map est affichée ou pas
+        random.seed(12345)
         self.active = True
 
         values = [0, globalVar.TILE_COUNT-1]
